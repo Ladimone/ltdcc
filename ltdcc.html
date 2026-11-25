@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Mật mã của Lời tiễn dặn</title>
+<style>
+:root{--bg:#09110f;--panel:#0f1c18;--gold:#e9c879;--gold2:#b98b3d;--cream:#f5eedb;--muted:#b7c0b3;--red:#b93e48;--green:#7dbb8b;--line:rgba(233,200,121,.26);--glow:rgba(233,200,121,.4);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--cream);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;background:radial-gradient(circle at 15% 10%,rgba(63,94,67,.35),transparent 45%),radial-gradient(circle at 85% 85%,rgba(124,42,43,.25),transparent 40%),#09110f;position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 50% 50%,rgba(233,200,121,.04),transparent 70%);animation:bgPulse 8s ease-in-out infinite alternate;pointer-events:none}
+@keyframes bgPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.2);opacity:.9}}
+button,select,input{font:inherit}button{cursor:pointer}
+.wrap{width:min(1280px,calc(100% - 32px));margin:auto;padding:18px 0 36px;position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;color:var(--gold);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;text-shadow:0 0 10px rgba(233,200,121,.3)}
+.screen{display:none;animation:in .4s cubic-bezier(.16,1,.3,1)}.screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,4vw,38px);box-shadow:0 20px 60px #0006,0 0 25px rgba(233,200,121,.08);position:relative;backdrop-filter:blur(10px);animation:cardGlow 6s ease-in-out infinite alternate}
+@keyframes cardGlow{0%{box-shadow:0 20px 60px #0006,0 0 15px rgba(233,200,121,.06)}100%{box-shadow:0 20px 60px #0008,0 0 30px rgba(233,200,121,.18);border-color:rgba(233,200,121,.4)}}
+.hero{text-align:center;max-width:720px;margin:6vh auto 0;position:relative;overflow:hidden}
+.eyebrow{color:var(--gold);letter-spacing:.2em;text-transform:uppercase;font-size:.75rem;font-weight:700;display:inline-block;animation:float 4s ease-in-out infinite alternate}
+@keyframes float{0%{transform:translateY(0)}100%{transform:translateY(-3px)}}
+h1,h2,.q{font-family:Georgia,serif;font-weight:500}
+h1{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.05;margin:14px 0;letter-spacing:-0.02em}
+h1 span{display:block;background:linear-gradient(110deg,#e9c879 30%,#ffffff 50%,#e9c879 70%);background-size:200% auto;color:transparent;-webkit-background-clip:text;background-clip:text;animation:goldShimmer 4s linear infinite}
+@keyframes goldShimmer{to{background-position:200% center}}
+.hero p{color:#d3d9ce;line-height:1.75;max-width:560px;margin:0 auto}
+.thread{height:2px;width:min(300px,70%);margin:22px auto;background:linear-gradient(90deg,transparent,var(--red),#f19999,var(--red),transparent);box-shadow:0 0 16px rgba(185,62,72,.9);position:relative;animation:threadPulse 2s ease-in-out infinite alternate}
+@keyframes threadPulse{0%{opacity:.7;transform:scaleX(.96)}100%{opacity:1;transform:scaleX(1.04)}}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.btn{border:1px solid var(--line);background:#ffffff08;color:var(--cream);border-radius:13px;padding:13px 16px;transition:all .25s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
+.btn:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.4),0 0 15px rgba(233,200,121,.25)}
+.btn.main{border:0;color:#1b2118;font-weight:800;background:linear-gradient(120deg,#f1d995,#c49a4a);box-shadow:0 6px 20px rgba(233,200,121,.3)}
+.btn.main:hover:not(:disabled){box-shadow:0 8px 25px rgba(233,200,121,.5);transform:translateY(-2px) scale(1.02)}
+.btn.gold{color:var(--gold)}.btn:disabled{opacity:.4;cursor:default}
+.mode b{display:block;color:var(--gold);margin-bottom:3px}.mode small{color:var(--muted)}
+.setup{max-width:520px;margin:6vh auto}.setup label{display:block;color:var(--gold);font-size:.88rem;margin:16px 0 6px}
+.inp{width:100%;padding:12px;color:var(--cream);background:#07110e;border:1px solid #526153;border-radius:10px;transition:.2s}
+.inp:focus{border-color:var(--gold);outline:none;box-shadow:0 0 12px rgba(233,200,121,.3)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.row .btn{flex:1;min-width:120px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pill{border:1px solid var(--line);border-radius:99px;padding:7px 13px;color:var(--gold);font-size:.82rem;background:#0b1713;box-shadow:0 0 10px rgba(233,200,121,.1)}
+.bar{height:7px;background:#29362d;border-radius:9px;overflow:hidden;margin-bottom:16px;box-shadow:inset 0 1px 3px #000}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));box-shadow:0 0 12px var(--gold);transition:width .4s ease}
+.layout{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+.layout.solo{grid-template-columns:1fr}
+.chap{color:var(--gold);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+.q{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:clamp(1.5rem,3.2vw,2.5rem);line-height:1.4;margin:14px 0 24px}
+.ans{display:flex;gap:14px;width:100%;text-align:left;padding:16px 18px;margin-bottom:12px;font-size:clamp(1.05rem,1.9vw,1.4rem);border-radius:12px;color:var(--cream);border:1px solid #34483a;background:#ffffff06;line-height:1.5;transition:all .2s cubic-bezier(.16,1,.3,1)}
+.ans:hover:not(:disabled){border-color:var(--gold2);transform:translateX(4px);background:#ffffff10;box-shadow:0 4px 16px rgba(0,0,0,.3),0 0 12px rgba(233,200,121,.15)}
+.ans b{flex:0 0 36px;height:36px;border-radius:8px;display:grid;place-items:center;color:var(--gold);background:#c9a75a1a;border:1px solid #c9a75a40;transition:.2s}
+.ans.ok{border-color:var(--green);background:#397d4933;box-shadow:0 0 15px rgba(125,187,139,.3)}.ans.ok b{background:var(--green);color:#07110e;border-color:var(--green)}
+.ans.no{border-color:#d56a70;background:#a72e3835;box-shadow:0 0 15px rgba(185,62,72,.3)}.ans.no b{background:var(--red);color:#fff;border-color:#d56a70}
+.ans.lock{opacity:.55}.ans:disabled{cursor:default}
+.fb{display:none;margin-top:14px;padding:15px;border-radius:12px;background:#c9a75a10;border:1px solid var(--line);line-height:1.65;box-shadow:0 0 15px rgba(233,200,121,.1)}.fb.on{display:block;animation:in .3s}.fb b{color:var(--gold)}
+.ctl{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}
+.hint{color:var(--muted);font-size:.8rem}
+.side{display:block}.side .card{padding:10px 16px;border-radius:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.side h3{margin:0!important}#scores{display:flex;gap:10px;flex-wrap:wrap;flex:1}#scores .sc{margin:0;gap:14px;min-width:150px}
+.side h3{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.sc{display:flex;justify-content:space-between;padding:9px 11px;margin-bottom:8px;border-radius:10px;background:#ffffff08;transition:.2s}
+.sc.cur{border:1px solid var(--gold2);color:var(--gold);box-shadow:0 0 12px rgba(233,200,121,.25);background:#c9a75a15}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:26px 0 24px}
+.tile{aspect-ratio:1;border-radius:16px;border:1px solid #34483a;background:linear-gradient(160deg,#16271f,#0d1713);color:var(--gold);font-family:Georgia,serif;font-size:clamp(1.4rem,4vw,2.3rem);display:grid;place-items:center;transition:all .25s cubic-bezier(.16,1,.3,1);box-shadow:inset 0 0 0 1px #ffffff06,0 4px 12px #0004;position:relative}
+.tile:hover{border-color:var(--gold);transform:translateY(-4px) scale(1.03);box-shadow:0 12px 28px #0008,0 0 22px rgba(233,200,121,.4)}
+.tile.ok{background:linear-gradient(160deg,#d3ac55,#9c7430);color:#101a12;border-color:#e2c477;box-shadow:0 4px 15px rgba(211,172,85,.4)}
+.tile.no{background:linear-gradient(160deg,#8a323a,#5a1f26);color:#fff;border-color:#d56a70;box-shadow:0 4px 15px rgba(138,50,58,.4)}
+.tile[data-ic]::after{content:attr(data-ic);position:absolute;top:5px;right:7px;font-size:.85rem}
+.evc{margin:14px 0 6px;padding:16px;border-radius:14px;border:1px solid var(--gold2);background:linear-gradient(160deg,#c9a75a18,#b93e4812);text-align:center;box-shadow:0 0 20px rgba(233,200,121,.15);animation:in .3s}
+.evh{display:flex;justify-content:center;align-items:center;gap:10px;color:var(--gold);font-size:1.15rem;font-family:Georgia,serif}.evh span{font-size:1.5rem}
+.evc p{margin:10px auto;color:#d3d9ce;line-height:1.6;max-width:520px;font-size:.92rem}
+.evc p.evres{color:var(--gold);font-weight:600}
+.evbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.wheelbox{position:relative;width:min(260px,70vw);aspect-ratio:1;margin:18px auto 14px}
+.wheel{width:100%;height:100%;border-radius:50%;border:4px solid var(--gold);box-shadow:0 0 35px rgba(233,200,121,.4);position:relative;transition:transform 4.2s cubic-bezier(.12,.7,.1,1)}
+.wheel::after{content:"";position:absolute;inset:41%;border-radius:50%;background:var(--panel);border:3px solid var(--gold);box-shadow:0 0 10px rgba(0,0,0,.8)}
+.wl{position:absolute;inset:0;display:flex;justify-content:center;padding-top:9%}
+.wl span{font-weight:800;font-size:.88rem;color:#fff;text-shadow:0 1px 3px #000a}
+.ptr{position:absolute;left:50%;top:-10px;transform:translateX(-50%);z-index:2;border:11px solid transparent;border-top:20px solid var(--gold);border-bottom:0;filter:drop-shadow(0 4px 6px #000)}
+.fin{text-align:center;max-width:720px;margin:4vh auto}
+.big{font-family:Georgia,serif;font-size:clamp(3rem,10vw,5.5rem);color:var(--gold);margin:8px 0;text-shadow:0 0 30px rgba(233,200,121,.5);animation:float 3s ease-in-out infinite alternate}
+.fin p{color:#d0d8cd;line-height:1.7}.rank{max-width:420px;margin:16px auto}
+details{text-align:left;margin:8px 0;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#ffffff06;transition:.2s}
+details[open]{border-color:var(--gold2);background:#ffffff0e}
+summary{cursor:pointer;color:var(--gold)}details p{margin:8px 0 0;font-size:.92rem}
+.foot{text-align:center;color:#718174;font-size:.74rem;margin-top:20px}
+.fog{position:fixed;inset:0;z-index:50;overflow:hidden;opacity:0;pointer-events:none;transition:opacity 1s ease;background:radial-gradient(ellipse at center,rgba(9,17,15,.55),rgba(9,17,15,.92))}
+.fog.on{opacity:1;pointer-events:all}
+.fog i{position:absolute;width:90vmax;height:60vmax;border-radius:50%;background:radial-gradient(closest-side,rgba(215,230,220,.42),rgba(215,230,220,.12) 60%,transparent);filter:blur(40px);animation:drift 9s ease-in-out infinite alternate}
+.fog i:nth-child(1){left:-30vmax;top:-10vmax}
+.fog i:nth-child(2){right:-35vmax;top:15vmax;animation-duration:11s;animation-direction:alternate-reverse}
+.fog i:nth-child(3){left:5vmax;bottom:-30vmax;animation-duration:13s}
+@keyframes drift{from{transform:translateX(-8vmax) scale(1)}to{transform:translateX(18vmax) scale(1.15)}}
+.fogt{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:20px;transform:translateY(10px);transition:transform 1.2s ease}
+.fog.on .fogt{transform:none}
+.fogt small{color:var(--gold);letter-spacing:.28em;text-transform:uppercase;font-size:.8rem;font-weight:700}
+.fogt b{display:block;font-family:Georgia,serif;font-weight:500;font-size:clamp(1.8rem,6vw,3.4rem);color:var(--cream);margin-top:12px;text-shadow:0 0 28px rgba(233,200,121,.6)}
+@media(max-width:760px){.top span:last-child{display:none}}
+@media(max-width:480px){.modes{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== V3: hiệu ứng động ===== */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+/* Vệt sáng chạy quanh viền khung */
+.card::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0 62%,rgba(233,200,121,.15) 72%,#f6e3a1 88%,#fff6d6 92%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;
+  filter:drop-shadow(0 0 6px rgba(233,200,121,.7));animation:spinBorder 6s linear infinite}
+.side .card::after{animation-duration:8s}
+@keyframes spinBorder{to{--ang:360deg}}
+/* Hover nảy lò xo */
+.btn,.ans,.tile{transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s,background .25s}
+.btn:hover:not(:disabled){transform:translateY(-3px) scale(1.04)}
+.btn:active:not(:disabled){transform:scale(.96)}
+.ans:hover:not(:disabled){transform:translateX(8px) scale(1.01)}
+.tile:hover{transform:translateY(-6px) scale(1.08) rotate(-1.5deg)}
+.tile:active{transform:scale(.93)}
+/* Ô số bồng bềnh lệch nhịp + ô đúng phát sáng nhịp thở */
+.tile{animation:tileFloat 3.6s ease-in-out infinite alternate}
+.tile:nth-child(2n){animation-duration:4.2s;animation-delay:-.8s}
+.tile:nth-child(3n){animation-duration:3.1s;animation-delay:-1.6s}
+.tile:nth-child(5n){animation-duration:4.8s;animation-delay:-2.4s}
+@keyframes tileFloat{from{translate:0 0}to{translate:0 -5px}}
+.tile.ok{animation:tileFloat 3.6s ease-in-out infinite alternate,okGlow 2s ease-in-out infinite alternate}
+@keyframes okGlow{from{box-shadow:0 4px 15px rgba(211,172,85,.35)}to{box-shadow:0 4px 30px rgba(246,227,161,.85)}}
+/* Tiêu đề & số nổi bồng bềnh */
+h1{animation:float 4.5s ease-in-out infinite alternate;text-shadow:0 0 30px rgba(233,200,121,.25)}
+.chap{animation:chapGlow 3s ease-in-out infinite alternate}
+@keyframes chapGlow{from{text-shadow:0 0 0 transparent}to{text-shadow:0 0 12px rgba(233,200,121,.8)}}
+.pill{animation:pillPulse 3.5s ease-in-out infinite alternate}
+@keyframes pillPulse{from{box-shadow:0 0 6px rgba(233,200,121,.1)}to{box-shadow:0 0 16px rgba(233,200,121,.4)}}
+.sc.cur{animation:pillPulse 1.8s ease-in-out infinite alternate}
+/* Quầng sáng trôi + đom đóm lấp lánh ở nền */
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:orbMove 16s ease-in-out infinite alternate}
+.orb.o1{width:46vmax;height:46vmax;left:-12vmax;top:-10vmax;background:radial-gradient(closest-side,rgba(233,200,121,.28),transparent)}
+.orb.o2{width:40vmax;height:40vmax;right:-14vmax;bottom:-12vmax;background:radial-gradient(closest-side,rgba(185,62,72,.3),transparent);animation-duration:20s;animation-direction:alternate-reverse}
+.orb.o3{width:34vmax;height:34vmax;left:35%;top:30%;background:radial-gradient(closest-side,rgba(100,170,130,.2),transparent);animation-duration:24s}
+@keyframes orbMove{from{transform:translate(-6vmax,-3vmax) scale(.9)}to{transform:translate(10vmax,7vmax) scale(1.15)}}
+.spark{position:absolute;bottom:-20px;border-radius:50%;background:#f6e3a1;box-shadow:0 0 8px 2px rgba(233,200,121,.8);opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translate(0,0) scale(.6);opacity:0}10%{opacity:.9}50%{transform:translate(var(--sx),-55vh) scale(1.1);opacity:.5}70%{opacity:1}100%{transform:translate(calc(var(--sx) * -.6),-115vh) scale(.5);opacity:0}}
+.spark.star{border-radius:0;background:none;box-shadow:none;color:#f6e3a1;text-shadow:0 0 8px rgba(233,200,121,.9);line-height:1}
+
+/* ===== V4: dạng câu hỏi mới ===== */
+.tag{display:inline-block;margin-left:10px;padding:3px 11px;border-radius:99px;font-size:.7rem;letter-spacing:.1em;border:1px solid var(--gold2);background:#c9a75a1c;color:var(--cream);vertical-align:middle;animation:pillPulse 2.5s ease-in-out infinite alternate}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tfrow .ans{justify-content:center;align-items:center;font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;padding:28px;margin:0}
+.ans.sel{border-color:var(--gold);background:#c9a75a22;box-shadow:0 0 16px rgba(233,200,121,.35)}
+.ans small{display:block;color:var(--gold);margin-top:6px;font-size:.8em}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px}
+.mcol{display:grid;gap:12px;align-content:start}.mcol .ans{margin-bottom:0}
+.pc0{--pc:#e9c879}.pc1{--pc:#7dbb8b}.pc2{--pc:#7fb3e0}.pc3{--pc:#d98fd0}
+.ans.mpair:not(.ok):not(.no){border-color:var(--pc);box-shadow:0 0 14px color-mix(in srgb,var(--pc) 35%,transparent)}
+.ans.mpair:not(.ok):not(.no) b{background:var(--pc);color:#07110e;border-color:var(--pc)}
+.hintbox{margin:0 0 12px;padding:14px 18px;border-radius:12px;border:1px dashed var(--gold2);background:#c9a75a10;font-size:clamp(1rem,1.8vw,1.3rem);line-height:1.5;animation:in .3s}
+.hintbox.answer{border-style:solid;border-color:var(--green);background:#397d4930}
+.actrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center}
+@media(max-width:700px){.mgrid,.tfrow{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="top"><span>✦ Hồ sơ văn học · Tây Bắc</span><span>20 câu · 2 chặng</span></div>
+
+<section id="home" class="screen on"><div class="card hero">
+<div class="eyebrow">Mật mã của lời tiễn dặn</div>
+<h1>Lời tiễn <span>dặn</span></h1>
+<p>Giữa màn sương núi rừng, một sợi chỉ đỏ vẫn nối hai người qua chia lìa, lời thề và những tập tục nghiệt ngã. Hãy giải mã 20 dấu vết để mở khóa câu chuyện về tình yêu, lòng thủy chung và khát vọng hạnh phúc.</p>
+<div class="thread"></div>
+<div class="modes">
+<button class="btn mode" onclick="pick('solo')"><b>◈ Chế độ trình chiếu</b><small>Cả lớp cùng chơi, mỗi câu một màn hình.</small></button>
+<button class="btn mode" onclick="pick('team')"><b>◈ Chơi theo đội</b><small>Đội luân phiên, tự cộng điểm.</small></button></div>
+<p class="hint" style="margin-top:16px">Chặng I · Giải mã cuộc chia ly (câu 1–10)<br>Chặng II · Giải mã lời thề (câu 11–20)</p>
+</div></section>
+
+<section id="setup" class="screen"><div class="card setup">
+<div class="eyebrow">Chuẩn bị</div><h2 id="sTitle" style="font-size:1.9rem;margin:8px 0">Gọi tên các đội</h2>
+<div id="teamBox"><label for="n">Số đội</label>
+<select class="inp" id="n" onchange="teamInputs()"><option>2</option><option>3</option><option>4</option></select>
+<div id="names"></div></div>
+<p class="hint" id="sNote"></p>
+<div class="row"><button class="btn main" onclick="start()">Mở cánh rừng →</button><button class="btn gold" onclick="show('home')">Quay lại</button></div>
+</div></section>
+
+<section id="game" class="screen">
+<div class="head"><span class="pill" id="mPill"></span><span class="pill" id="tPill"></span><button class="btn gold" style="padding:7px 13px" onclick="if(confirm('Về trang đầu? Tiến độ sẽ mất.'))show('home')">⌂ Trang đầu</button></div>
+<div class="bar"><i id="fill"></i></div>
+<div class="layout" id="layout">
+<aside class="side"><div class="card" id="scoreCard"><h3>Bảng điểm</h3><div id="scores"></div><span class="hint">Mỗi câu đúng +10 điểm</span></div></aside>
+<main class="card" style="min-height:440px">
+<div id="bv"><div class="chap" id="bchap"></div><h2 class="q" style="margin-bottom:0">Chọn một ô để mở câu hỏi</h2>
+<div class="tiles" id="tiles"></div>
+<div class="ctl"><span class="hint" id="bhint"></span><button class="btn main" id="bnext" onclick="nextChap()">Tiếp →</button></div></div>
+<div id="qv" style="display:none"><div class="chap" id="chap"></div><div id="evp"></div><h2 class="q" id="q"></h2>
+<div id="ans"></div><div class="fb" id="fb" aria-live="polite"></div>
+<div class="ctl"><button class="btn gold" onclick="toBoard()">▦ Về các ô</button><span class="hint" id="hint">Phím A–D để chọn</span><button class="btn main" id="next" onclick="toBoard()">Xong, về các ô →</button></div></div>
+</main>
+</div></section>
+
+<section id="finish" class="screen"><div class="card fin">
+<div class="eyebrow">Mật mã đã được mở</div><h2 style="font-size:1.8rem;margin:8px 0">Qua màn sương, lời thề còn lại</h2>
+<div class="big" id="big"></div><p id="msg"></p><div class="rank" id="rank"></div>
+<div id="review"></div><div class="thread"></div>
+<p><i>“Nếu tình yêu đã đủ thủy chung, điều gì còn khiến con người không thể đến được với hạnh phúc?”</i></p>
+<div class="row" style="justify-content:center"><button class="btn main" onclick="start()">↻ Chơi lại (đáp án xáo trộn)</button><button class="btn gold" onclick="show('home')">⌂ Màn hình đầu</button></div>
+</div></section>
+<div class="foot">MẬT MÃ CỦA LỜI TIỄN DẶN · Ôn tập văn học dân gian Thái</div>
+</div>
+<div class="fog" id="fog" aria-hidden="true"><i></i><i></i><i></i><div class="fogt"><small id="fogS"></small><b id="fogT"></b></div></div>
+<script>
+// [chặng, câu hỏi, [đáp án ĐÚNG, sai, sai, sai], giải thích]
+const Q=[
+[1,"Hình ảnh “Vừa đi vừa ngoảnh lại / Vừa đi vừa ngoái trông” thể hiện rõ nhất điều gì?",
+["Nỗi lưu luyến khiến nhân vật khó dứt khỏi cuộc chia tay dù vẫn phải bước tiếp.","Sự do dự trước một hành trình mới khi nhân vật chưa biết mình sẽ đi về đâu.","Nỗi lo lắng về cuộc sống của người mình yêu sau khi bước vào gia đình mới.","Mong muốn níu kéo thời gian để trì hoãn việc phải đối diện với hoàn cảnh hiện tại."],
+"Cử chỉ ngoảnh lại, ngoái trông nhấn mạnh sự quyến luyến và đau đớn khi phải chia lìa. Phương án A bao quát được cả cử chỉ bên ngoài lẫn tâm trạng bên trong."],
+[1,"Lời hẹn “Không lấy được nhau mùa hạ, ta sẽ lấy nhau mùa đông” thể hiện nổi bật nhất điều gì?",
+["Lòng thủy chung cùng niềm hi vọng được đoàn tụ dù thời gian và hoàn cảnh có thể làm thay đổi dự định.","Ý thức rằng tình yêu cần được trì hoãn đến khi điều kiện gia đình và xã hội trở nên thuận lợi.","Sự chấp nhận rằng hai người khó có thể đến với nhau, nên chỉ còn cách gửi gắm tình cảm vào lời hứa.","Quan niệm rằng tình yêu có thể vượt qua khó khăn chủ yếu nhờ sự kiên nhẫn chờ đợi của mỗi người."],
+"Lời hẹn qua các mùa thể hiện sự chờ đợi bền bỉ và niềm tin vào ngày đoàn tụ. Điểm quan trọng là nhân vật không từ bỏ khát vọng hạnh phúc."],
+[1,"Xung đột trung tâm trong câu chuyện tình yêu của “Lời tiễn dặn” được thể hiện rõ nhất qua sự đối lập nào?",
+["Khát vọng tự do yêu đương của đôi trẻ với những ràng buộc hôn nhân do gia đình và tập tục áp đặt.","Tình yêu riêng tư của đôi trẻ với trách nhiệm phải duy trì sự hòa thuận giữa hai gia đình.","Mong muốn đoàn tụ của đôi trẻ với khoảng cách không gian và thời gian khiến họ không thể gặp nhau.","Quan niệm về tình yêu của thế hệ trẻ với những khác biệt trong cách nhìn nhận cuộc sống của người lớn."],
+"Mâu thuẫn cốt lõi không chỉ nằm ở khoảng cách hay bất đồng tình cảm mà ở việc đôi trẻ không được tự quyết định hạnh phúc của mình."],
+[1,"Việc lời tiễn dặn được kể qua tiếng nói của nhân vật “anh” có tác dụng nổi bật nào?",
+["Đưa cảm xúc và suy nghĩ của người trong cuộc đến gần người đọc, khiến nỗi đau chia lìa trở nên trực tiếp, tha thiết.","Tạo khoảng cách giữa người kể và sự việc, giúp câu chuyện được trình bày khách quan như một bản ghi chép.","Làm cho diễn biến câu chuyện chỉ phụ thuộc vào hành động của cô gái, còn tâm trạng chàng trai ít được thể hiện.","Giúp người kể biết đầy đủ suy nghĩ của tất cả nhân vật, kể cả những điều họ không trực tiếp bộc lộ."],
+"Tiếng nói của người trong cuộc khiến cảm xúc yêu thương, đau đớn và thủy chung được thể hiện trực tiếp. Không nên đồng nhất sự chân thành của lời kể với tính khách quan tuyệt đối."],
+[1,"Cử chỉ chải tóc, búi tóc cho người yêu trong hoàn cảnh chia lìa có ý nghĩa sâu sắc nhất là gì?",
+["Biến tình yêu và nỗi xót xa thành hành động chăm sóc cụ thể, qua đó bộc lộ sự dịu dàng và trân trọng người mình yêu.","Giúp nhân vật giữ lại những nghi thức quen thuộc để giảm bớt cảm giác xa lạ trước cuộc sống mới.","Thể hiện mong muốn giữ vai trò quyết định trong cuộc sống của người yêu ngay cả khi không thể ở bên nhau.","Nhấn mạnh sự bất lực của nhân vật khi chỉ có thể chăm sóc người yêu bằng những việc nhỏ bé, không thể thay đổi hoàn cảnh."],
+"Hành động chăm sóc cho thấy tình yêu không chỉ nằm trong lời nói mà còn được thể hiện qua sự quan tâm, chở che và trân trọng."],
+[1,"Nhận định nào giải thích đúng nhất đặc trưng thể loại truyện thơ dân gian của tác phẩm?",
+["Tác phẩm kết hợp việc kể lại số phận, sự việc của nhân vật với lời thơ giàu cảm xúc, nhịp điệu và chất trữ tình.","Tác phẩm chủ yếu ghi lại tâm trạng nhất thời của nhân vật, không xây dựng diễn biến câu chuyện hay hoàn cảnh cụ thể.","Tác phẩm dùng lời thơ để trình bày những luận điểm về hôn nhân, sau đó đưa ra lí lẽ nhằm thuyết phục người đọc.","Tác phẩm đặt trọng tâm vào các sự kiện li kì, còn cảm xúc nhân vật chỉ có tác dụng kết nối các tình tiết."],
+"Truyện thơ dân gian vừa có yếu tố tự sự, vừa có yếu tố trữ tình. Câu chuyện về số phận nhân vật luôn gắn với cảm xúc được thể hiện qua lời thơ."],
+[1,"Chuỗi hình ảnh “rừng ớt – rừng cà – rừng lá ngón” nên được hiểu như thế nào trong mạch cảm xúc của đoạn thơ?",
+["Các hình ảnh góp phần mở rộng không gian chờ đợi, đồng thời làm nổi bật tâm trạng ngóng trông và nỗi đau ngày càng sâu sắc.","Chuỗi hình ảnh chủ yếu liệt kê những loại cây quen thuộc, giúp người đọc hình dung chính xác con đường nhân vật đã đi qua.","Những hình ảnh thể hiện sự thay đổi của thiên nhiên theo mùa, qua đó nhấn mạnh quy luật tuần hoàn của thời gian.","Việc nhắc đến những khu rừng liên tiếp cho thấy nhân vật muốn rời xa nơi cũ để tìm một cuộc sống ít ràng buộc hơn."],
+"Chuỗi hình ảnh vừa gợi không gian miền núi vừa gắn với việc chờ đợi, ngóng trông. Hình ảnh lá ngón mang sắc thái đau đớn, tuyệt vọng, nhưng không nên suy diễn thành một hành động cụ thể."],
+[1,"Lời hẹn “Không lấy được nhau thời trẻ, ta sẽ lấy nhau khi góa bụa về già” chủ yếu cho thấy điều gì?",
+["Tình yêu được hình dung như một lời cam kết kéo dài suốt đời, vượt qua giới hạn của thời gian và hoàn cảnh.","Nhân vật cho rằng tình yêu chỉ có giá trị nếu hai người thực hiện được lời hứa đúng vào thời điểm đã định.","Nhân vật đã từ bỏ mong muốn thay đổi hiện tại và chỉ giữ tình cảm như một kỉ niệm của tuổi trẻ.","Nhân vật tin rằng thời gian tự nó sẽ giải quyết mọi xung đột mà không cần con người lựa chọn hay hành động."],
+"Lời hẹn kéo dài đến tận tuổi già cho thấy tình yêu bền bỉ, son sắt. Đây là biểu hiện của lời thề thủy chung chứ không phải sự từ bỏ hoàn toàn hi vọng."],
+[1,"Những lời thề mạnh mẽ, có hình ảnh gắn với cái chết và sự hóa thân, chủ yếu có chức năng nghệ thuật nào?",
+["Cường điệu hóa mức độ gắn bó để diễn tả tình yêu mãnh liệt, thủy chung vượt khỏi những giới hạn thông thường.","Khẳng định rằng nhân vật đã lựa chọn một kết cục bi thảm và không còn mong muốn thay đổi hoàn cảnh.","Tạo nên không khí huyền bí nhằm khiến câu chuyện chuyển từ tình yêu sang những sự kiện siêu nhiên.","Giải thích niềm tin tâm linh của cộng đồng bằng cách kể lại các sự kiện được xem là có thể xảy ra ngoài đời."],
+"Cách diễn đạt phóng đại làm nổi bật cường độ tình cảm và lời thề son sắt. Cần đọc hình ảnh này theo chức năng biểu cảm, không hiểu thành lời khuyến khích hành động ngoài đời."],
+[1,"Từ cuộc chia lìa của đôi trẻ, vấn đề xã hội nào được tác phẩm đặt ra rõ nhất?",
+["Khi hôn nhân bị chi phối bởi những ràng buộc áp đặt, khát vọng yêu thương và quyền lựa chọn hạnh phúc của cá nhân có thể bị tổn thương.","Khi con người đặt tình yêu lên hàng đầu, những trách nhiệm với gia đình và cộng đồng tất yếu trở nên vô nghĩa.","Khi hoàn cảnh sống thay đổi, mọi lời hứa trong tình yêu đều khó giữ nguyên giá trị như lúc ban đầu.","Khi hai người yêu nhau sâu sắc, tình cảm riêng tư luôn đủ sức giải quyết mọi bất công trong đời sống."],
+"Tác phẩm gợi ra sự bất công của những ràng buộc hôn nhân áp đặt, đồng thời bày tỏ sự cảm thông với những người không được tự quyết định hạnh phúc."],
+[2,"Việc các nhân vật nhắc đến những mùa, tháng và thời điểm xa nhau có ý nghĩa gì đối với lời hẹn?",
+["Làm cho sự chờ đợi trở nên cụ thể và kéo dài, qua đó nhấn mạnh quyết tâm gìn giữ tình yêu qua nhiều thử thách.","Chỉ xác định thời điểm cuộc gặp gỡ tiếp theo để câu chuyện có mốc thời gian rõ ràng và dễ theo dõi.","Cho thấy nhân vật đặt niềm tin chủ yếu vào sự thay đổi của thời tiết hơn là tình cảm của hai người.","Làm giảm tính chân thực của câu chuyện vì các nhân vật liên tục đưa ra những dự định chưa được thực hiện."],
+"Những mốc thời gian cụ thể tạo cảm giác chờ đợi dài lâu, đồng thời nhấn mạnh sự bền bỉ của lời hẹn và khát vọng đoàn tụ."],
+[2,"Tác dụng của phép điệp trong những lời thơ bày tỏ tình yêu và lời thề là gì?",
+["Tạo nhịp điệu có sức ngân vang, làm cảm xúc được nhấn mạnh và khiến lời hứa mang sắc thái quyết liệt, tha thiết.","Làm cho nội dung trở nên hoàn toàn mới ở mỗi lần lặp, giúp câu chuyện liên tục chuyển sang những sự kiện khác nhau.","Giảm bớt cảm xúc trực tiếp của nhân vật, khiến lời kể nghiêng nhiều hơn về việc thuật lại sự việc một cách trung lập.","Chủ yếu giúp người nghe ghi nhớ các sự kiện theo trình tự, còn cường độ tình cảm không thay đổi đáng kể."],
+"Điệp ngữ, điệp cấu trúc vừa tạo âm hưởng của lời thơ dân gian vừa nhấn mạnh nỗi đau, sự tha thiết và lòng thủy chung."],
+[2,"Khi đọc các hình ảnh thiên nhiên trong “Lời tiễn dặn”, cách tiếp cận nào phù hợp nhất?",
+["Kết hợp ý nghĩa tả thực của không gian miền núi với khả năng gợi cảm xúc, thời gian chờ đợi và tâm trạng nhân vật.","Ưu tiên giải thích các hình ảnh theo đặc điểm thực vật và địa lí, bởi ý nghĩa văn hóa không ảnh hưởng đến nội dung tác phẩm.","Coi mỗi hình ảnh thiên nhiên là một biểu tượng cố định, có thể giải thích giống nhau dù xuất hiện trong hoàn cảnh nào.","Xem thiên nhiên chủ yếu là phông nền trang trí, bởi diễn biến tâm trạng nhân vật không phụ thuộc vào hình ảnh xung quanh."],
+"Hình ảnh thiên nhiên vừa gắn với không gian sống của cộng đồng Thái, vừa mang sức gợi cảm xúc và tâm trạng. Vì vậy cần đọc chúng trong ngữ cảnh cụ thể."],
+[2,"Khi chứng kiến người mình yêu bị đối xử tàn nhẫn ở nhà chồng, hành động chăm sóc của chàng trai cho thấy điều gì?",
+["Lòng thương yêu được thể hiện bằng sự quan tâm thiết thực, đồng thời cho thấy chàng trai không thờ ơ trước nỗi đau của người yêu.","Mong muốn bù đắp cho việc không thể ngăn cuộc hôn nhân diễn ra, nhưng tình cảm ấy chủ yếu vẫn dừng lại ở sự nuối tiếc.","Nỗ lực duy trì mối quan hệ cũ bằng cách nhắc người yêu nhớ lại những lời hứa, hơn là quan tâm đến tình cảnh hiện tại.","Ý thức thực hiện một bổn phận thông thường đối với người quen, không nhất thiết phản ánh tình cảm sâu sắc của nhân vật."],
+"Việc đỡ dậy, chải tóc, chăm sóc và giúp đỡ người yêu cho thấy tình cảm được thể hiện bằng hành động cụ thể, không chỉ bằng lời hứa."],
+[2,"Hình ảnh tình yêu được ví như “trăm lớp nghìn trùng” gợi lên cách hiểu nào phù hợp nhất?",
+["Tình cảm sâu nặng, bền chặt, được hình dung như nhiều lớp nối tiếp nhau và khó bị những trở ngại bên ngoài chia cắt.","Một tình yêu bị bao phủ bởi quá nhiều nghi ngờ, khiến các nhân vật không còn có thể nhận biết rõ tình cảm của nhau.","Khoảng cách địa lí giữa hai nhân vật lớn đến mức trở thành nguyên nhân duy nhất khiến họ không thể đoàn tụ.","Một mối quan hệ phức tạp vì mỗi người đều có nhiều lựa chọn tình cảm khác nhau trong cùng một thời điểm."],
+"Hình ảnh phóng đại gợi chiều sâu và độ bền của tình yêu. Trọng tâm là sự gắn bó mạnh mẽ trước trở ngại, không phải khoảng cách địa lí đơn thuần."],
+[2,"Nhận xét nào thể hiện đầy đủ hơn về hình tượng cô gái trong đoạn trích?",
+["Cô chịu đau khổ vì hoàn cảnh hôn nhân bị áp đặt nhưng vẫn gắn bó với tình yêu và nuôi giữ mong muốn được sống theo tình cảm của mình.","Cô hoàn toàn phụ thuộc vào chàng trai, không bộc lộ suy nghĩ hay tình cảm riêng ngoài việc chờ đợi chàng quyết định tương lai.","Cô dần chấp nhận cuộc hôn nhân hiện tại, còn những lời hẹn với người yêu cũ chỉ còn là hồi ức không ảnh hưởng đến tâm trạng.","Cô chủ động lựa chọn chia lìa để thử thách tình cảm của chàng trai, qua đó kiểm chứng mức độ thủy chung của người mình yêu."],
+"Cô gái hiện lên trong nỗi đau do hoàn cảnh áp đặt nhưng không vì thế mà tình yêu và khát vọng hạnh phúc mất đi. Không nên xem cô chỉ là nhân vật thụ động."],
+[2,"Lời đối thoại giữa chàng trai và cô gái giúp người đọc hiểu điều gì sâu sắc hơn về tình yêu của họ?",
+["Nỗi đau và sự lưu luyến được bộc lộ từ hai phía, làm rõ tình cảm gắn bó nhưng bị hoàn cảnh bên ngoài ngăn trở.","Hai nhân vật có cách hiểu hoàn toàn trái ngược về tình yêu, nên cuộc chia tay chủ yếu bắt nguồn từ bất đồng cá nhân.","Đối thoại giúp giảm vai trò của cảm xúc, tập trung vào việc trao đổi thông tin để hai nhân vật xác định đường đi tiếp theo.","Cuộc trò chuyện cho thấy một người đã dứt khoát từ bỏ tình yêu, còn người kia cố gắng thuyết phục bằng những lời hứa."],
+"Lời đối thoại làm rõ tình yêu sâu nặng và tâm trạng đau đớn của cả hai. Bi kịch chủ yếu đến từ hoàn cảnh ngăn trở chứ không phải sự lạnh nhạt giữa họ."],
+[2,"Giá trị nhân văn nổi bật của “Lời tiễn dặn” được thể hiện đầy đủ nhất ở nhận định nào?",
+["Trân trọng tình yêu thủy chung, cảm thông với người chịu bất hạnh và đặt vấn đề về quyền được lựa chọn hạnh phúc.","Đề cao lòng kiên nhẫn của những người yêu nhau, đồng thời khẳng định rằng chỉ cần chờ đợi đủ lâu thì mọi trở ngại sẽ biến mất.","Bảo vệ tình cảm cá nhân bằng cách phủ nhận mọi trách nhiệm của con người đối với gia đình và cộng đồng.","Ca ngợi sự hi sinh trong tình yêu như một chuẩn mực bắt buộc, bất kể sự hi sinh đó có khiến con người mất đi quyền tự quyết."],
+"Giá trị nhân văn của tác phẩm nằm ở sự trân trọng tình yêu chân thành, cảm thông với số phận bất hạnh và phản ánh những ràng buộc làm tổn thương quyền sống hạnh phúc."],
+[2,"Sự đối lập giữa cách đối xử tàn nhẫn của người chồng và sự chăm sóc dịu dàng của chàng trai có tác dụng gì?",
+["Làm nổi bật sự tương phản về cách ứng xử, qua đó khắc sâu tình yêu và lòng trắc ẩn của chàng trai, đồng thời phơi bày bi kịch của cô gái.","Cho thấy sự khác biệt về tính cách giữa hai người đàn ông, nhưng không liên quan đáng kể đến chủ đề tình yêu và hôn nhân.","Khẳng định rằng mâu thuẫn trong tác phẩm chỉ xuất phát từ tính cách cá nhân, không chịu ảnh hưởng của hoàn cảnh xã hội.","Làm cho tình cảm của cô gái trở nên khó xác định, bởi hai cách đối xử trái ngược khiến cô không còn giữ được tình yêu ban đầu."],
+"Sự tương phản làm rõ một bên là cách đối xử gây tổn thương, một bên là sự chăm sóc và đồng cảm. Qua đó, nỗi bất hạnh của cô gái và phẩm chất của chàng trai càng nổi bật."],
+[2,"Thông điệp nào khái quát cân bằng nhất tinh thần của “Lời tiễn dặn”?",
+["Tình yêu thủy chung rất đáng trân trọng, nhưng hạnh phúc còn cần quyền lựa chọn và sự tôn trọng đối với con người.","Chỉ cần tình yêu đủ sâu đậm, con người có thể vượt qua mọi ràng buộc mà không cần thay đổi hoàn cảnh sống.","Sự hi sinh càng lớn thì tình yêu càng có giá trị, vì vậy mỗi người nên chấp nhận đau khổ để giữ trọn lời hứa.","Hạnh phúc cá nhân chỉ có thể được bảo đảm khi mọi phong tục truyền thống bị loại bỏ khỏi đời sống cộng đồng."],
+"Tác phẩm vừa đề cao tình yêu thủy chung vừa gợi suy ngẫm về những điều kiện để con người có hạnh phúc, đặc biệt là quyền tự quyết và sự tôn trọng."]
+];
+
+const X={},TYPE={mcq:'Trắc nghiệm',tf:'Đúng / Sai',order:'Sắp xếp mật mã',match:'Ghép đôi',hint:'Mở gợi ý'};
+function setX(i,chap,prompt,exp,d){const a=d.t==='tf'?(d.a?'Đúng':'Sai'):d.t==='order'?d.items.join(' → '):d.t==='match'?d.pairs.map(p=>p[0]+' ↔ '+p[1]).join(' · '):d.ans;Q[i]=[chap,prompt,[a,'','',''],exp];X[i]=d}
+const typ=i=>X[i]?X[i].t:'mcq';
+// Chặng I
+setX(1,1,'Lời hẹn “Không lấy được nhau mùa hạ, ta sẽ lấy nhau mùa đông” cho thấy nhân vật đã từ bỏ hi vọng đoàn tụ.','SAI. Lời hẹn qua các mùa thể hiện sự chờ đợi bền bỉ, niềm tin vào ngày đoàn tụ và lòng thủy chung, không phải sự từ bỏ.',{t:'tf',a:false});
+setX(3,1,'Ghép mỗi hình ảnh, chi tiết bên trái với ý nghĩa phù hợp bên phải.','Mỗi chi tiết đều có chức năng biểu cảm riêng: ngoảnh lại gợi sự lưu luyến, chải tóc là tình thương qua hành động, chuỗi rừng gợi nỗi ngóng trông, còn lời thề gắn với cái chết là cách cường điệu để nhấn mạnh tình yêu.',{t:'match',pairs:[['Vừa đi vừa ngoảnh lại','Lưu luyến, khó dứt khỏi cuộc chia tay'],['Chải tóc, búi tóc cho người yêu','Tình thương thể hiện bằng hành động chăm sóc'],['Rừng ớt – rừng cà – rừng lá ngón','Nỗi ngóng trông, đau đớn ngày càng sâu'],['Lời thề gắn với cái chết, hóa thân','Cường điệu hóa để diễn tả tình yêu mãnh liệt']]});
+setX(5,1,'Mở gợi ý để đoán: “Lời tiễn dặn” là truyện thơ dân gian của dân tộc nào, và kết hợp hai yếu tố nào?','Truyện thơ dân gian vừa có yếu tố tự sự, vừa có yếu tố trữ tình: câu chuyện về số phận nhân vật luôn gắn với cảm xúc được thể hiện qua lời thơ.',{t:'hint',ans:'Dân tộc Thái; kết hợp yếu tố tự sự (kể chuyện) và trữ tình (cảm xúc, nhịp điệu).',hints:['Tác phẩm thuộc văn học dân gian vùng Tây Bắc.','Một yếu tố giúp kể lại số phận, sự việc của nhân vật.','Hai yếu tố có chữ cái đầu là T... và T... (đều gồm hai tiếng).']});
+setX(6,1,'Sắp xếp chuỗi hình ảnh theo đúng thứ tự trong mạch cảm xúc của đoạn thơ (chạm lần lượt từ đầu đến cuối).','Chuỗi hình ảnh mở rộng dần không gian chờ đợi và làm nỗi đau ngày càng sâu. Hình ảnh lá ngón mang sắc thái đau đớn, tuyệt vọng nhất.',{t:'order',items:['Rừng ớt','Rừng cà','Rừng lá ngón']});
+setX(7,1,'Lời hẹn lấy nhau “khi góa bụa về già” cho thấy tình yêu được hình dung như một lời cam kết kéo dài suốt đời.','ĐÚNG. Lời hẹn kéo dài đến tận tuổi già cho thấy tình yêu bền bỉ, son sắt: đây là biểu hiện của lời thề thủy chung chứ không phải sự từ bỏ hi vọng.',{t:'tf',a:true});
+// Chặng II
+setX(10,2,'Sắp xếp các lời hẹn theo thời gian từ ngắn đến dài (chạm lần lượt từ đầu đến cuối).','Lời hẹn mở rộng dần: từ mùa này sang mùa khác, rồi cả một đời, cuối cùng vượt cả giới hạn sống chết. Mức độ kéo dài càng lớn càng làm nổi bật lòng thủy chung.',{t:'order',items:['Lấy nhau mùa đông (nếu mùa hạ chưa được)','Lấy nhau khi về già (nếu thời trẻ chưa được)','Lời thề vượt cả cái chết, hóa thân']});
+setX(12,2,'Hình ảnh thiên nhiên trong “Lời tiễn dặn” chỉ là phông nền trang trí, tâm trạng nhân vật không phụ thuộc vào hình ảnh xung quanh.','SAI. Hình ảnh thiên nhiên vừa gắn với không gian sống của cộng đồng Thái, vừa mang sức gợi cảm xúc và tâm trạng, nên cần đọc trong ngữ cảnh cụ thể.',{t:'tf',a:false});
+setX(14,2,'Ghép mỗi biện pháp, hình ảnh bên trái với tác dụng phù hợp bên phải.','Mỗi biện pháp nghệ thuật đều phục vụ cảm xúc: điệp tạo âm hưởng tha thiết, mốc thời gian làm sự chờ đợi cụ thể, hình ảnh phóng đại gợi độ bền của tình yêu, còn tương phản làm bi kịch rõ hơn.',{t:'match',pairs:[['Điệp ngữ, điệp cấu trúc','Tạo nhịp điệu ngân vang, nhấn mạnh sự tha thiết'],['Lời hẹn qua các mùa, các tháng','Làm sự chờ đợi cụ thể, kéo dài, thể hiện quyết tâm giữ tình yêu'],['Hình ảnh “trăm lớp nghìn trùng”','Tình cảm sâu nặng, bền chặt, khó bị chia cắt'],['Sự tương phản: chồng tàn nhẫn – chàng trai dịu dàng','Khắc sâu lòng trắc ẩn của chàng trai và bi kịch của cô gái']]});
+setX(16,2,'Mở gợi ý để đoán: bi kịch của đôi trẻ chủ yếu bắt nguồn từ đâu?','Lời đối thoại cho thấy nỗi đau và sự lưu luyến từ cả hai phía. Bi kịch đến từ hoàn cảnh ngăn trở chứ không phải sự lạnh nhạt giữa họ.',{t:'hint',ans:'Từ hoàn cảnh và tập tục hôn nhân bị áp đặt, không phải do thiếu tình cảm giữa hai người.',hints:['Hai nhân vật vẫn yêu nhau tha thiết đến cuối.','Nguyên nhân nằm ở bên ngoài hai người.','Liên quan đến việc ai đó quyết định hôn nhân thay cho họ.']});
+setX(17,2,'Việc chàng trai chăm sóc người yêu ở nhà chồng cho thấy tình cảm của anh được thể hiện bằng hành động cụ thể, không chỉ bằng lời hứa.','ĐÚNG. Việc đỡ dậy, chải tóc, chăm sóc và giúp đỡ người yêu cho thấy tình thương được thể hiện bằng sự quan tâm thiết thực.',{t:'tf',a:true});
+let ST={};
+const S=i=>ST[i]=ST[i]||initST(i);
+function initST(i){const x=X[i];if(!x)return{};
+  if(x.t==='order'){let d;do{d=shuffle(x.items.map((_,k)=>k))}while(d.every((v,k)=>v===k));return{d,sel:[]}}
+  if(x.t==='match'){let r;do{r=shuffle(x.pairs.map((_,k)=>k))}while(r.every((v,k)=>v===k));return{r,pr:{},cur:0}}
+  if(x.t==='hint')return{used:0,shown:false};return{}}
+const $=id=>document.getElementById(id),L='ABCD';
+const CH={1:['Chặng I','Giải mã cuộc chia ly'],2:['Chặng II','Giải mã lời thề']};
+let mode='solo',ch=1,view='board',pts={},evs={},idx=0,teams=[],order=[],res=[],busy=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+function pick(m){mode=m;const t=m==='team';$('teamBox').style.display=t?'block':'none';$('sTitle').textContent=t?'Gọi tên các đội':'Sẵn sàng trình chiếu';$('sNote').textContent=t?'Các đội trả lời luân phiên, mỗi câu đúng được 10 điểm.':'Cả lớp cùng chọn đáp án, sau đó mở lời giải.';teamInputs();show('setup')}
+function teamInputs(){const n=mode==='team'?+$('n').value:0,d=['Sợi Đỏ','Ánh Vàng','Sương Núi','Lời Thề'];$('names').innerHTML=Array.from({length:n},(_,i)=>`<label>Tên đội ${i+1}</label><input class="inp" maxlength="24" value="Đội ${d[i]}">`).join('')}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function start(){
+  teams=mode==='team'?[...document.querySelectorAll('#names input')].map((e,i)=>e.value.trim()||'Đội '+(i+1)):['Cả lớp'];
+  if(mode==='team'&&!teams.length)teams=['Đội 1','Đội 2'];
+  ST={};order=Q.map(q=>shuffle([0,1,2,3]));res=Array(Q.length).fill(null);idx=0;ch=1;view='board';pts={};teams.forEach(t=>pts[t]=0);evs={};
+  $('scoreCard').style.display=mode==='team'?'flex':'none';
+  $('layout').classList.toggle('solo',mode!=='team');
+  $('mPill').textContent=mode==='team'?'◈ Chơi theo đội':'◈ Trình chiếu';show('game');render()}
+const answered=()=>res.filter(Boolean).length;
+const curTeam=()=>teams[answered()%teams.length];
+const base=()=>(ch-1)*10;
+function scores(){return pts}
+function render(){
+  const n=answered(),cur=curTeam();
+  $('bv').style.display=view==='board'?'block':'none';$('qv').style.display=view==='q'?'block':'none';
+  $('fill').style.width=n/Q.length*100+'%';
+  $('tPill').innerHTML=mode==='team'?'Lượt: <b>'+esc(cur)+'</b>':'Đã mở '+n+' / '+Q.length;
+  const sc=scores();$('scores').innerHTML=teams.map(t=>`<div class="sc ${t===cur?'cur':''}"><span>${esc(t)}</span><b>${sc[t]}</b></div>`).join('');
+  if(view==='board'){
+    $('bchap').textContent=CH[ch][0]+' · '+CH[ch][1];
+    $('tiles').innerHTML=Array.from({length:10},(_,k)=>{const i=base()+k,r=res[i];return `<button class="tile ${r?(r.ok?'ok':'no'):''}" onclick="openQ(${i})" aria-label="Câu ${i+1}">${i+1}</button>`}).join('');
+    const d=Array.from({length:10},(_,k)=>res[base()+k]).filter(Boolean).length;
+    $('bnext').disabled=d<10;$('bnext').textContent=ch===1?'Sang Chặng II →':'Xem kết quả ↗';
+    $('bhint').textContent=(d<10?`Đã mở ${d}/10 ô của chặng này`:'Đã giải mã hết chặng!');
+    return}
+  const q=Q[idx],o=order[idx],r=res[idx],done=!!r,right=o.indexOf(0),eo=evOn(idx),pend=eo&&!done&&!evReady(idx);
+  $('chap').innerHTML=esc(CH[q[0]][0]+' · '+CH[q[0]][1])+(pend?'':`<span class="tag">${TYPE[typ(idx)]}</span>`);
+  $('evp').innerHTML=eo?evPanel(idx):'';
+  $('q').textContent=pend?`Câu ${idx+1} · Sự kiện đặc biệt`:`Câu ${idx+1}. ${q[1]}`;
+  $('ans').style.display=pend?'none':'block';
+  $('ans').innerHTML=ansHTML(idx);
+  $('fb').className='fb'+(done?' on':'');
+  $('fb').innerHTML=done?(!X[idx]?`<b>${r.c===right?'✦ Chính xác!'+(mode==='team'?' '+esc(r.t)+' '+fm(r.d)+' điểm':''):'✧ Đáp án đúng: '+L[right]+'.'+(mode==='team'&&r.d<0?' '+esc(r.t)+' '+r.d+' điểm.':'')}</b><br>${esc(q[3])}`:`<b>${r.ok?'✦ Chính xác!'+(mode==='team'?' '+esc(r.t)+' '+fm(r.d)+' điểm':''):'✧ Chưa đúng. Đáp án: '+esc(q[2][0])+(mode==='team'&&r.d<0?' '+esc(r.t)+' '+r.d+' điểm.':'')}</b><br>${esc(q[3])}`):'';
+  $('next').style.visibility=done&&!pickPending(idx)?'visible':'hidden';
+  $('hint').textContent=done||pend?'':(typ(idx)==='mcq'?'Phím A–D để chọn':typ(idx)==='tf'?'Phím Đ = Đúng · S = Sai':'');}
+function openQ(i){if(busy)return;idx=i;view='q';render();scrollTo(0,0)}
+function toBoard(){if(busy)return;if(pickPending(idx)){$('hint').textContent='Hãy chọn đội mục tiêu trước nhé.';return}view='board';render();scrollTo(0,0)}
+function nextChap(){
+  if(busy)return;
+  if(ch===1){fogTo(2,()=>{ch=2;view='board';render()})}else finish()}
+const fm=d=>d>0?'+'+d:''+d;
+const EV={
+2:{k:'wheel',ic:'🎡',name:'Vòng quay may mắn',rule:'Quay trước khi xem câu hỏi. Ô quay trúng quyết định điểm thưởng/phạt của câu này.',segs:[{l:'×2',r:20,w:0},{l:'×3',r:30,w:0},{l:'Liều',r:30,w:-10},{l:'Thường',r:10,w:0},{l:'Quà',r:15,w:0},{l:'Xui',r:5,w:-5}]},
+4:{k:'trap',ic:'💀',name:'Bẫy Về Số 0'},
+6:{k:'bet',ic:'🎲',name:'Cược điểm',rule:'Chọn số điểm cược TRƯỚC khi xem câu hỏi. Đúng: +10 và thêm đúng số điểm đã cược. Sai: mất số điểm đã cược.'},
+8:{k:'sab',ic:'🗡️',name:'Thẻ Phá Hoại',rule:'Trả lời đúng để dùng thẻ: chọn một đội khác bị trừ 20 điểm.'},
+11:{k:'swap',ic:'🔄',name:'Thẻ Hoán Đổi Điểm',rule:'Trả lời đúng để dùng thẻ: hoán đổi điểm với một đội tuỳ chọn (hoặc giữ nguyên).'},
+15:{k:'steal',ic:'🥷',name:'Thẻ Trộm Điểm',rule:'Trả lời đúng để dùng thẻ: chọn một đội khác và cướp 20 điểm của họ (đội đó có ít hơn thì lấy hết).'},
+13:{k:'wheel',ic:'🎡',name:'Vòng quay định mệnh',rule:'Rủi ro cao, thưởng lớn! Quay trước khi xem câu hỏi.',segs:[{l:'×2',r:20,w:0},{l:'×3',r:30,w:0},{l:'Cược lớn',r:40,w:-20},{l:'Thường',r:10,w:0},{l:'Hồi sinh',r:10,w:5},{l:'+25',r:25,w:0}]},
+18:{k:'bet',ic:'🔥',name:'ALL-IN chốt hạ',allin:true,rule:'Cược nửa số điểm hoặc ALL-IN toàn bộ (tối thiểu 20 điểm) TRƯỚC khi xem câu hỏi. Đúng: +10 và thêm số cược. Sai: mất số cược.'}
+};
+const evOn=i=>mode==='team'&&EV[i];
+function evReady(i){const e=EV[i],st=evs[i]||{};return e.k==='wheel'?!!st.mod:e.k==='bet'?st.bet!==undefined:true}
+const pickPending=i=>{const st=evs[i];return !!(st&&st.pick&&!st.picked)};
+function wheelHTML(e,st){
+  const n=e.segs.length,sg=360/n,cols=['#8a323a','#b98b3d','#2f5d44','#4b3a73','#a85d2a','#2d5a6b'];
+  const bg=e.segs.map((x,k)=>`${cols[k%6]} ${k*sg}deg ${(k+1)*sg}deg`).join(',');
+  const lbl=e.segs.map((x,k)=>`<div class="wl" style="transform:rotate(${k*sg+sg/2}deg)"><span>${esc(x.l)}</span></div>`).join('');
+  return `<div class="wheelbox"><div class="ptr"></div><div class="wheel" id="wheel" style="background:conic-gradient(${bg});transform:rotate(${st.spin!==undefined?st.rot:0}deg)">${lbl}</div></div>`}
+function evPanel(i){
+  const e=EV[i],st=evs[i]||{},r=res[i],t=st.t||curTeam();let b='';
+  if(e.k==='trap'){if(!r)return '';return `<div class="evc"><div class="evh"><span>${e.ic}</span><b>${e.name}</b></div><p class="evres">${st.msg}</p></div>`}
+  if(e.k==='wheel'){
+    if(!st.mod){const sp=st.spin!==undefined;b=`<p>${e.rule}</p>${wheelHTML(e,st)}<div class="evbtn"><button class="btn main" id="spinBtn" onclick="spin(${i})" ${sp?'disabled':''}>${sp?'Đang quay…':'🎡 QUAY! · '+esc(t)}</button></div>`}
+    else b=`<p>${esc(t)} quay trúng <b>${esc(st.mod.l)}</b>: đúng ${fm(st.mod.r)}, sai ${st.mod.w?fm(st.mod.w):'không mất điểm'}.</p>`}
+  else if(e.k==='bet'){
+    if(st.bet===undefined){
+      const cap=Math.max(e.allin?20:10,pts[t]||0);
+      let o=e.allin?[0,Math.floor(cap/10)*5,cap]:[0,10,20,30].filter(v=>v<=cap);o=[...new Set(o)];
+      b=`<p>${e.rule}</p><p><b>Đội quyết định: ${esc(t)}</b> (đang có ${pts[t]||0} điểm)</p><div class="evbtn">`+o.map(v=>`<button class="btn ${v?'main':'gold'}" onclick="setBet(${i},${v})">${v?(e.allin&&v===cap?'🔥 ALL-IN ':'Cược ')+v:'Không cược'}</button>`).join('')+'</div>'}
+    else b=`<p>${esc(t)} cược <b>${st.bet}</b> điểm${st.bet?`: đúng +${10+st.bet}, sai −${st.bet}`:''}.</p>`}
+  else{
+    b=`<p>${e.rule}</p>`;
+    if(r&&st.pick&&!st.picked){
+      const tg=teams.map((n,k)=>[n,k]).filter(x=>x[0]!==t);
+      b+=`<p><b>Chính xác! Chọn đội mục tiêu:</b></p><div class="evbtn">`+tg.map(x=>`<button class="btn main" onclick="pickTarget(${i},${x[1]})">${esc(x[0])}</button>`).join('')+(e.k==='swap'?`<button class="btn gold" onclick="pickTarget(${i},-1)">Không đổi</button>`:'')+'</div>'}}
+  if(st.msg)b+=`<p class="evres">${st.msg}</p>`;
+  return `<div class="evc"><div class="evh"><span>${e.ic}</span><b>${e.name}</b></div>${b}</div>`}
+function spin(i){
+  const e=EV[i],st=evs[i]=evs[i]||{};if(st.spin!==undefined)return;
+  const sg=360/e.segs.length;st.spin=Math.floor(Math.random()*e.segs.length);st.t=curTeam();
+  st.rot=360*5+(360-(st.spin*sg+sg/2));
+  $('spinBtn').disabled=true;$('spinBtn').textContent='Đang quay…';$('wheel').style.transform=`rotate(${st.rot}deg)`;
+  setTimeout(()=>{st.mod=e.segs[st.spin];if(view==='q'&&idx===i)render()},4500)}
+function setBet(i,v){const st=evs[i]=evs[i]||{};if(st.bet!==undefined)return;st.t=curTeam();st.bet=v;render()}
+function pickTarget(i,k){
+  const st=evs[i],e=EV[i];if(!st||st.picked)return;const t=st.t;st.picked=true;
+  if(k<0)st.msg='Giữ nguyên điểm, không dùng thẻ.';
+  else if(e.k==='sab'){pts[teams[k]]=Math.max(0,pts[teams[k]]-20);st.msg=`🗡️ ${esc(teams[k])} bị trừ 20 điểm!`}
+  else if(e.k==='steal'){const m=Math.min(20,pts[teams[k]]||0);pts[teams[k]]-=m;pts[t]=(pts[t]||0)+m;st.msg=`🥷 ${esc(t)} cướp ${m} điểm của ${esc(teams[k])}!`}
+  else{const a=pts[t];pts[t]=pts[teams[k]];pts[teams[k]]=a;st.msg=`🔄 ${esc(t)} và ${esc(teams[k])} đã hoán đổi điểm!`}
+  render()}
+
+function ansHTML(i){
+  const x=X[i],r=res[i],done=!!r;
+  if(!x){const o=order[i],q=Q[i],right=o.indexOf(0);
+    return o.map((p,k)=>`<button class="ans ${done&&k===right?'ok':''} ${done&&r.c===k&&k!==right?'no':''} ${done&&k!==right&&r.c!==k?'lock':''}" ${done?'disabled':''} onclick="choose(${k})"><b>${L[k]}</b><span>${esc(q[2][p])}</span></button>`).join('')}
+  const s=S(i);
+  if(x.t==='tf')return '<div class="tfrow">'+[true,false].map(v=>{const sel=done&&r.c===(v?1:0);
+    return `<button class="ans ${done&&v===x.a?'ok':''} ${sel&&v!==x.a?'no':''} ${done&&v!==x.a&&!sel?'lock':''}" ${done?'disabled':''} onclick="tfPick(${v})"><b>${v?'Đ':'S'}</b><span>${v?'ĐÚNG':'SAI'}</span></button>`}).join('')+'</div>';
+  if(x.t==='order'){const n=x.items.length;
+    let h=s.d.map(k=>{const p=s.sel.indexOf(k),cls=done?(p===k?'ok':'no'):(p>=0?'sel':'');
+      return `<button class="ans ${cls}" ${done?'disabled':''} onclick="ordTap(${k})"><b>${p>=0?p+1:'·'}</b><span>${esc(x.items[k])}${done&&p!==k?`<small>Đúng: vị trí thứ ${k+1}</small>`:''}</span></button>`}).join('');
+    if(!done)h+=`<div class="actrow"><button class="btn main" ${s.sel.length===n?'':'disabled'} onclick="ordSubmit()">Chốt thứ tự</button><button class="btn gold" onclick="ordReset()">↺ Chọn lại</button><span class="hint">Chạm vào từng ô theo đúng thứ tự, chạm lại để bỏ chọn.</span></div>`;
+    return h}
+  if(x.t==='match'){const n=x.pairs.length,owner=p=>Object.keys(s.pr).find(k=>s.pr[k]===p);
+    const Lh=x.pairs.map((pr,l)=>{const has=s.pr[l]!==undefined,good=has&&s.r[s.pr[l]]===l;
+      const cls=done?(good?'ok':'no'):(s.cur===l?'sel':(has?'mpair pc'+l:''));
+      return `<button class="ans ${cls}" ${done?'disabled':''} onclick="mLeft(${l})"><b>${l+1}</b><span>${esc(pr[0])}${done&&!good?`<small>Đúng: ${esc(pr[1])}</small>`:''}</span></button>`}).join('');
+    const Rh=s.r.map((pi,p)=>{const l=owner(p),has=l!==undefined,good=has&&+l===pi;
+      const cls=done?(good?'ok':'no'):(has?'mpair pc'+l:'');
+      return `<button class="ans ${cls}" ${done?'disabled':''} onclick="mRight(${p})"><b>${has?+l+1:'·'}</b><span>${esc(x.pairs[pi][1])}</span></button>`}).join('');
+    let h=`<div class="mgrid"><div class="mcol">${Lh}</div><div class="mcol">${Rh}</div></div>`;
+    if(!done)h+=`<div class="actrow"><button class="btn main" ${Object.keys(s.pr).length===n?'':'disabled'} onclick="mSubmit()">Chốt ghép đôi</button><button class="btn gold" onclick="mReset()">↺ Làm lại</button><span class="hint">Chạm một ô bên trái, rồi chạm ô bên phải để ghép.</span></div>`;
+    return h}
+  if(x.t==='hint'){let h='';
+    for(let k=0;k<s.used;k++)h+=`<div class="hintbox">💡 Gợi ý ${k+1}: ${esc(x.hints[k])}</div>`;
+    if(s.shown||done)h+=`<div class="hintbox answer"><b>Đáp án:</b> ${esc(x.ans)}</div>`;
+    if(!done){
+      if(!s.shown)h+=`<div class="actrow"><span class="hint">Điểm tối đa hiện tại: ${10-3*s.used}</span>`+(s.used<x.hints.length?`<button class="btn gold" onclick="hintMore()">💡 Mở gợi ý ${s.used+1} (còn tối đa ${10-3*(s.used+1)} điểm)</button>`:'')+`<button class="btn main" onclick="hintReveal()">Chốt · xem đáp án</button></div>`;
+      else h+=`<div class="actrow"><button class="btn main" onclick="hintJudge(true)">✓ Trả lời đúng (+${10-3*s.used})</button><button class="btn gold" onclick="hintJudge(false)">✗ Chưa đúng</button></div>`}
+    return h}
+  return ''}
+const canAct=()=>!busy&&view==='q'&&!res[idx];
+function tfPick(v){if(canAct())commit(v===X[idx].a,v?1:0)}
+function ordTap(k){if(!canAct())return;const s=S(idx),p=s.sel.indexOf(k);if(p>=0)s.sel.splice(p,1);else s.sel.push(k);render()}
+function ordReset(){if(!canAct())return;S(idx).sel=[];render()}
+function ordSubmit(){if(!canAct())return;const s=S(idx);if(s.sel.length!==X[idx].items.length)return;commit(s.sel.every((v,p)=>v===p),-1)}
+function nextFree(s,n){for(let l=0;l<n;l++)if(s.pr[l]===undefined)return l;return null}
+function mLeft(l){if(!canAct())return;const s=S(idx);if(s.pr[l]!==undefined){delete s.pr[l];s.cur=l}else s.cur=(s.cur===l?null:l);render()}
+function mRight(p){if(!canAct())return;const s=S(idx);if(s.cur===null||s.cur===undefined)return;
+  for(const k in s.pr)if(s.pr[k]===p)delete s.pr[k];
+  s.pr[s.cur]=p;s.cur=nextFree(s,X[idx].pairs.length);render()}
+function mReset(){if(!canAct())return;const s=S(idx);s.pr={};s.cur=0;render()}
+function mSubmit(){if(!canAct())return;const s=S(idx),n=X[idx].pairs.length;if(Object.keys(s.pr).length!==n)return;
+  let ok=true;for(let l=0;l<n;l++)if(s.r[s.pr[l]]!==l)ok=false;commit(ok,-1)}
+function hintMore(){if(!canAct())return;const s=S(idx);if(s.used<X[idx].hints.length)s.used++;render()}
+function hintReveal(){if(!canAct())return;S(idx).shown=true;render()}
+function hintJudge(ok){if(!canAct())return;commit(ok,-1,10-3*S(idx).used)}
+function choose(i){if(typ(idx)!=='mcq')return;commit(order[idx][i]===0,i)}
+function commit(ok,c,pOk){
+  if(busy||view!=='q'||res[idx])return;
+  const eo=evOn(idx),e=eo?EV[idx]:null;if(eo&&!evReady(idx))return;
+  const st=e?(evs[idx]=evs[idx]||{}):null,t=(st&&st.t)||curTeam();if(st)st.t=t;
+  let d=ok?(pOk===undefined?10:pOk):0;
+  if(e){
+    if(e.k==='wheel')d=ok?st.mod.r:st.mod.w;
+    else if(e.k==='bet')d=ok?10+st.bet:-st.bet;
+    else if(e.k==='trap'){if(ok)st.msg='🍀 Câu này là cái bẫy về số 0, nhưng bạn đã thoát được!';else{d=-(pts[t]||0);st.msg=`💀 Dính bẫy! Điểm của ${esc(t)} quay về 0.`}}
+    else if(ok)st.pick=true;else st.msg='Trả lời sai nên thẻ không được dùng.'}
+  pts[t]=Math.max(0,(pts[t]||0)+d);res[idx]={c,ok,t,d};render();sfx(ok)}
+function sfx(ok){
+  try{const a=new(window.AudioContext||window.webkitAudioContext)(),tm=a.currentTime;
+    const note=(f,st,du,type,vol)=>{const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;o.connect(g);g.connect(a.destination);
+      g.gain.setValueAtTime(.0001,tm+st);g.gain.exponentialRampToValueAtTime(vol,tm+st+.02);g.gain.exponentialRampToValueAtTime(.0001,tm+st+du);o.start(tm+st);o.stop(tm+st+du+.05)};
+    if(ok){
+      // fanfare vui: C5 E5 G5 C6 rồi E6-G6-C7 lấp lánh, kết bằng hợp âm ngân dài
+      [523,659,784,1047].forEach((f,n)=>{note(f,n*.11,.3,'triangle',.22);note(f*2,n*.11,.2,'sine',.06)});
+      [1319,1568,2093].forEach((f,n)=>note(f,.5+n*.09,.25,'sine',.12));
+      [523,659,784,1047].forEach(f=>note(f,.8,1.3,'triangle',.14));
+      note(2637,.8,.5,'sine',.06);
+    }else{
+      [260,190].forEach((f,n)=>note(f,n*.12,.18,'sine',.1));
+    }
+  }catch(e){}}
+// Sương mù: phủ kín -> đổi câu khi màn hình đã mờ -> tan dần
+function fogTo(chapter,cb){
+  busy=true;$('fogS').textContent=CH[chapter][0];$('fogT').textContent=CH[chapter][1];
+  $('fog').classList.add('on');
+  setTimeout(cb,1100);
+  setTimeout(()=>$('fog').classList.remove('on'),2500);
+  setTimeout(()=>{busy=false},3500)}
+function finish(){
+  const sc=scores(),n=res.filter(r=>r&&r.ok).length;show('finish');
+  $('big').textContent=mode==='team'?Math.max(...Object.values(sc))+' điểm':n+' / 20';
+  $('msg').textContent=mode==='team'?'Các đội đã đi hết 20 dấu vết. Thứ hạng cuối cùng ở bên dưới.':'Bạn đã mở '+n+' trên 20 mật mã. Xem lại các câu chưa đúng rồi thử thêm một lượt nhé.';
+  $('rank').innerHTML=mode==='team'?[...teams].sort((a,b)=>sc[b]-sc[a]).map((t,i)=>`<div class="sc ${i?'':'cur'}"><span>${i?'':'✦ '}${esc(t)}</span><b>${sc[t]} điểm</b></div>`).join(''):'';
+  const bad=res.map((r,i)=>r&&!r.ok?i:-1).filter(i=>i>=0);
+  $('review').innerHTML=bad.length?'<p class="eyebrow" style="margin-top:20px">Ôn lại những câu chưa đúng</p>'+bad.map(i=>`<details><summary>Câu ${i+1}. ${esc(Q[i][1])}</summary><p><b style="color:var(--green)">Đáp án:</b> ${esc(Q[i][2][0])}<br>${esc(Q[i][3])}</p></details>`).join(''):'<p>Tuyệt vời, không sai câu nào!</p>'}
+document.addEventListener('keydown',e=>{
+  if(!$('game').classList.contains('on')||e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+  const k=e.key.toLowerCase(),i='abcd1234'.indexOf(k);
+  if(view==='q'&&typ(idx)==='tf'){if(k==='d'||k==='1'||k==='đ')tfPick(true);else if(k==='s'||k==='2')tfPick(false)}
+  else if(i>=0&&k.length===1)choose(i%4);
+  else if((k==='enter'||k==='escape')&&view==='q'&&res[idx])toBoard()});
+
+(function(){const fx=document.createElement('div');fx.id='fx';fx.setAttribute('aria-hidden','true');
+ fx.innerHTML='<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>';
+ for(let i=0;i<26;i++){const e=document.createElement('i');e.className='spark'+(i%5===0?' star':'');
+  const z=e.classList.contains('star');
+  if(z){e.textContent='✦';e.style.fontSize=(8+Math.random()*10)+'px'}else{const w=2+Math.random()*3.5;e.style.width=e.style.height=w+'px'}
+  e.style.left=Math.random()*100+'%';e.style.setProperty('--sx',(Math.random()*120-60)+'px');
+  e.style.animationDuration=(9+Math.random()*10)+'s';e.style.animationDelay=(-Math.random()*18)+'s';fx.appendChild(e)}
+ document.body.insertBefore(fx,document.body.firstChild)})();
+</script></body></html>
